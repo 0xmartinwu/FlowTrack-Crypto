@@ -8,6 +8,9 @@ import logging
 from datetime import datetime, timedelta
 import os
 from dotenv import load_dotenv
+import random
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 # Load environment variables from .env file
 load_dotenv()
@@ -22,10 +25,66 @@ BINANCE_FUTURES_API_URL = "https://fapi.binance.com"
 DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
 DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
 
+# 随机用户代理列表，使请求看起来更像浏览器
+USER_AGENTS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Safari/605.1.15",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:90.0) Gecko/20100101 Firefox/90.0",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36",
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1"
+]
+
 # 检查API密钥是否存在
 if not DEEPSEEK_API_KEY:
     logger.warning("DEEPSEEK_API_KEY not found in environment variables. AI analysis will not work.")
     st.warning("DeepSeek API Key not found. Please set the DEEPSEEK_API_KEY environment variable for AI analysis.")
+
+# 创建一个带有重试逻辑的请求函数
+def make_api_request(url, params=None):
+    """
+    使用重试逻辑和随机间隔发送API请求
+    """
+    # 创建一个会话
+    session = requests.Session()
+    
+    # 配置重试策略
+    retries = Retry(
+        total=5,  # 总共重试5次
+        backoff_factor=1,  # 退避因子，等待时间为 {backoff factor} * (2 ** ({number of previous retries}))
+        status_forcelist=[429, 500, 502, 503, 504, 418],  # 需要重试的HTTP状态码
+    )
+    
+    # 将重试策略应用于会话
+    adapter = HTTPAdapter(max_retries=retries)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+    
+    # 设置headers，使请求看起来更像浏览器
+    headers = {
+        "User-Agent": random.choice(USER_AGENTS),
+        "Accept": "application/json",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Origin": "https://www.binance.com",
+        "Referer": "https://www.binance.com/",
+        "Connection": "keep-alive"
+    }
+    
+    # 获取代理设置（如果有）
+    proxy_url = os.environ.get("HTTP_PROXY", None)
+    proxies = {"http": proxy_url, "https": proxy_url} if proxy_url else None
+    
+    # 添加随机延迟，避免频繁请求
+    time.sleep(random.uniform(0.5, 1.5))
+    
+    # 发送请求
+    try:
+        response = session.get(url, params=params, headers=headers, proxies=proxies, timeout=30)
+        response.raise_for_status()
+        return response.json()
+    except Exception as e:
+        logger.error(f"API请求失败: {e}")
+        raise e
 
 # 设置页面标题和布局
 st.set_page_config(
@@ -347,10 +406,8 @@ def get_klines_data(symbol, interval="5m", limit=50, is_futures=False):
             "limit": limit + 1  # 多获取一根，用于计算最后一根的变化
         }
 
-        response = requests.get(f"{base_url}{endpoint}", params=params)
-        response.raise_for_status()
-
-        klines = response.json()
+        # 使用新的API请求函数
+        klines = make_api_request(f"{base_url}{endpoint}", params)
 
         # 移除最后一根未完成的K线
         klines = klines[:-1]
@@ -419,10 +476,8 @@ def get_orderbook_stats(symbol, is_futures=False, limit=1000):
             "limit": limit
         }
 
-        response = requests.get(f"{base_url}{endpoint}", params=params)
-        response.raise_for_status()
-
-        orderbook = response.json()
+        # 使用新的API请求函数
+        orderbook = make_api_request(f"{base_url}{endpoint}", params)
 
         # 处理订单簿数据
         bids = [[float(price), float(qty)] for price, qty in orderbook["bids"]]
