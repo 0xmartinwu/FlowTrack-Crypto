@@ -7,6 +7,10 @@ import pandas as pd
 import logging
 from datetime import datetime, timedelta
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -15,8 +19,13 @@ logger = logging.getLogger(__name__)
 # 设置API密钥和URL
 BINANCE_API_URL = "https://api.binance.com"
 BINANCE_FUTURES_API_URL = "https://fapi.binance.com"
-DEEPSEEK_API_KEY = "sk-921489e743d14a3dafdd5a619405cf6c"
+DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
 DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
+
+# 检查API密钥是否存在
+if not DEEPSEEK_API_KEY:
+    logger.warning("DEEPSEEK_API_KEY not found in environment variables. AI analysis will not work.")
+    st.warning("DeepSeek API Key not found. Please set the DEEPSEEK_API_KEY environment variable for AI analysis.")
 
 # 设置页面标题和布局
 st.set_page_config(
