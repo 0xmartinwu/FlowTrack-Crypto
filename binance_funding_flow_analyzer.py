@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 # 设置API密钥和URL
 BINANCE_API_URL = "https://api.binance.com"
 BINANCE_FUTURES_API_URL = "https://fapi.binance.com"
-DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY", "api信息")
+DEEPSEEK_API_KEY = "sk-921489e743d14a3dafdd5a619405cf6c"
 DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
 
 # 设置页面标题和布局
@@ -29,105 +29,105 @@ st.set_page_config(
 # 自定义CSS，使界面更专业
 st.markdown("""
 <style>
-    /* 整体主题 */
+    /* 整体主题 - 更改为更友好的浅色主题 */
     .main {
-        background-color: #0e1117;
-        color: #d1d1d1;
+        background-color: #f8f9fa;
+        color: #333333;
     }
 
     /* 标题样式 */
     h1, h2, h3 {
-        color: #4da6ff;
+        color: #2070b5;
         font-weight: 600;
         margin-bottom: 1.5rem;
     }
 
     h1 {
-        border-bottom: 2px solid #4da6ff;
+        border-bottom: 2px solid #2070b5;
         padding-bottom: 0.5rem;
     }
 
     /* 按钮样式 */
     .stButton>button {
-        background-color: #2e6da4;
+        background-color: #2070b5;
         color: white;
         border-radius: 4px;
         border: none;
         padding: 0.5rem 1rem;
         font-weight: 500;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         transition: all 0.2s ease;
     }
 
     .stButton>button:hover {
-        background-color: #1c4c7d;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+        background-color: #19558c;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         transform: translateY(-1px);
     }
 
     /* 侧边栏样式 */
     .css-1d391kg {
-        background-color: #171c2e;
-        border-right: 1px solid #2c3454;
+        background-color: #f0f2f6;
+        border-right: 1px solid #d9e1e7;
     }
 
     /* 进度条样式 */
     .stProgress > div > div {
-        background-color: #4da6ff;
+        background-color: #2070b5;
     }
 
     /* 数据框样式 */
     div[data-testid="stDataFrame"] {
-        border: 1px solid #2c3454;
+        border: 1px solid #d9e1e7;
         border-radius: 5px;
         padding: 1px;
     }
 
     /* 卡片样式 */
     div.stBlock {
-        border: 1px solid #2c3454;
+        border: 1px solid #d9e1e7;
         border-radius: 5px;
         padding: 1.5rem;
         margin-bottom: 1rem;
-        background-color: #1a1f36;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        background-color: #ffffff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
     /* 输入框样式 */
     .stTextInput>div>div>input {
-        background-color: #171c2e;
-        color: #d1d1d1;
-        border: 1px solid #2c3454;
+        background-color: #ffffff;
+        color: #333333;
+        border: 1px solid #d9e1e7;
         border-radius: 4px;
     }
 
     /* 选择框样式 */
     .stSelectbox>div>div>div {
-        background-color: #171c2e;
-        color: #d1d1d1;
-        border: 1px solid #2c3454;
+        background-color: #ffffff;
+        color: #333333;
+        border: 1px solid #d9e1e7;
     }
 
     /* 标签样式 */
     .symbol-tag {
         display: inline-block;
-        background-color: #2e6da4;
+        background-color: #2070b5;
         color: white;
         padding: 0.3rem 0.6rem;
         margin: 0.2rem;
         border-radius: 4px;
         font-size: 0.9rem;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 
     /* 分析结果容器 */
     .analysis-container {
-        background-color: #1a1f36;
-        border: 1px solid #2c3454;
+        background-color: #ffffff;
+        border: 1px solid #d9e1e7;
         border-radius: 5px;
         padding: 1.5rem;
         margin-top: 1rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
     /* 表格样式 */
@@ -139,23 +139,23 @@ st.markdown("""
 
     th, td {
         padding: 0.75rem;
-        border: 1px solid #2c3454;
+        border: 1px solid #d9e1e7;
     }
 
     th {
-        background-color: #171c2e;
-        color: #4da6ff;
+        background-color: #f0f2f6;
+        color: #2070b5;
         font-weight: 500;
     }
 
     tr:nth-child(even) {
-        background-color: #171c2e;
+        background-color: #f8f9fa;
     }
 
     /* 代码块样式 */
     code {
-        background-color: #171c2e;
-        color: #4da6ff;
+        background-color: #f0f2f6;
+        color: #2070b5;
         padding: 0.2rem 0.4rem;
         border-radius: 3px;
         font-size: 0.9em;
@@ -163,7 +163,7 @@ st.markdown("""
 
     /* 链接样式 */
     a {
-        color: #4da6ff;
+        color: #2070b5;
         text-decoration: none;
     }
 
@@ -175,22 +175,22 @@ st.markdown("""
     hr {
         border: none;
         height: 1px;
-        background-color: #2c3454;
+        background-color: #d9e1e7;
         margin: 2rem 0;
     }
 
     /* 警告和错误信息样式 */
     .stAlert {
-        background-color: #1a1f36;
+        background-color: #fff8f8;
         border: 1px solid #ff4b4b;
-        color: #ff4b4b;
+        color: #d63939;
     }
 
     /* 信息提示样式 */
     .stInfo {
-        background-color: #1a1f36;
-        border: 1px solid #4da6ff;
-        color: #4da6ff;
+        background-color: #f0f7ff;
+        border: 1px solid #2070b5;
+        color: #2070b5;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -298,7 +298,7 @@ if not st.session_state.started_analysis:
     st.header("使用方法")
     st.markdown("1. 在侧边栏添加您想要分析的交易对（例如：BTCUSDT、ETHUSDT等）")
     st.markdown("2. 选择K线时间间隔（5分钟、15分钟、30分钟、1小时、4小时，日线）")
-    st.markdown("3. 点击“开始分析”按钮，等待分析完成")
+    st.markdown("3. 点击\"开始分析\"按钮，等待分析完成")
     st.markdown("4. 等待分析完成，查看详细分析结果")
 
 # 如果已经开始分析，显示分析结果
