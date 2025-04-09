@@ -854,6 +854,9 @@ def run_analysis(symbols):
             # 更新进度条
             progress_bar.progress((i + 1) / (len(symbols) * 4))
 
+        print('现货K线数据：', spot_klines_data)
+        print('期货K线数据：', futures_klines_data)
+
         # 获取订单簿数据
         status_text.text("正在获取订单簿数据...")
         spot_order_books = {}
@@ -866,6 +869,9 @@ def run_analysis(symbols):
 
             # 更新进度条
             progress_bar.progress(0.25 + (i + 1) / (len(symbols) * 4))
+
+        print('现货订单簿数据：', spot_order_books)
+        print('期货订单簿数据：', futures_order_books)
 
         # 分析资金流向趋势
         status_text.text("正在分析资金流向趋势...")
@@ -880,6 +886,9 @@ def run_analysis(symbols):
             # 更新进度条
             progress_bar.progress(0.5 + (i + 1) / (len(symbols) * 4))
 
+        print('现货资金流向趋势：', spot_trend_analysis)
+        print('期货资金流向趋势：', futures_trend_analysis)
+
         # 检测异常交易
         status_text.text("正在检测异常交易...")
         spot_anomalies = {}
@@ -892,6 +901,9 @@ def run_analysis(symbols):
 
             # 更新进度条
             progress_bar.progress(0.75 + (i + 1) / (len(symbols) * 4))
+
+        print('现货异常交易：', spot_anomalies)
+        print('期货异常交易：', futures_anomalies)
 
         # 分析资金压力
         status_text.text("正在分析资金压力...")
