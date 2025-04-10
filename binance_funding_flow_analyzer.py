@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 # 设置API密钥和URL
 BINANCE_API_URL = "https://api.binance.com"
 BINANCE_FUTURES_API_URL = "https://fapi.binance.com"
-DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
+DEEPSEEK_API_KEY = os.environ.get("sk-e939adc1ddfd4e6aa943fb108a07af5e")
 DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
 
 # 随机用户代理列表，使请求看起来更像浏览器
