@@ -352,9 +352,9 @@ if st.session_state.error_message:
 
 # 如果没有开始分析，显示欢迎页面
 if not st.session_state.started_analysis:
-    st.title("欢迎使用币安资金流向分析系统")
+    st.title("欢迎使用Goldenclick资金流向分析系统")
 
-    st.write("本系统可以帮助您分析币安交易所的资金流向，识别主力资金行为，判断市场趋势。")
+    st.write("本系统可以帮助您分析主要交易所的资金流向，识别主力资金行为，判断市场趋势。")
 
     st.header("主要功能")
     st.markdown("- **资金流向趋势分析**：分析现货和期货市场的资金流入流出趋势")
