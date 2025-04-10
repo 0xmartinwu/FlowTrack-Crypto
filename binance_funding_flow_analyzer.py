@@ -88,7 +88,7 @@ def make_api_request(url, params=None):
 
 # 设置页面标题和布局
 st.set_page_config(
-    page_title="币安资金流向分析",
+    page_title="资金流向分析",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
