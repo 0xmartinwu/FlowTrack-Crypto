@@ -20,8 +20,8 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(level
 logger = logging.getLogger(__name__)
 
 # 设置API密钥和URL
-BINANCE_API_URL = "https://api.binance.com"
-BINANCE_FUTURES_API_URL = "https://fapi.binance.com"
+BINANCE_API_URL = "https://bnsapi.goldenclick.ai"
+BINANCE_FUTURES_API_URL = "https://bnfapi.goldenclick.ai"
 DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
 DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
 
